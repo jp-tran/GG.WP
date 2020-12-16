@@ -1,3 +1,13 @@
+/**
+ * Required External Modules
+ */
+
+const path = require('path');
+
+const expressSession = require('express-session');
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -9,6 +19,27 @@ const app = express();
 app.use(bodyParser.json());
 
 const db = process.env.MONGO_URI;
+const port = process.env.PORT || 5000;
+
+/**
+ * Session Configuration (New!)
+ */
+
+const session = {
+  secret: process.env.SESSION_SECRET,
+  cookie: {},
+  resave: false,
+  saveUninitialized: false,
+};
+
+if (app.get('env') === 'production') {
+  // Serve secure cookies, requires HTTPS
+  session.cookie.secure = true;
+}
+
+/**
+ * Passport Configuration (New!)
+ */
 
 //mongo connect
 mongoose
@@ -19,8 +50,6 @@ mongoose
   })
   .then(() => console.log('MongoDB conected'))
   .catch((err) => console.log(err));
-
-const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
