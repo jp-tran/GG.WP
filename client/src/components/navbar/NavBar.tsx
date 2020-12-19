@@ -1,19 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import { Nav, Navbar, Container, NavbarBrand, NavbarToggler, Collapse } from 'reactstrap';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import MainNavButtons from './MainNavButtons';
 import AuthNavButtons from './AuthNavButtons';
 
 const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => setIsOpen(!isOpen);
+
+  const { isAuthenticated } = useAuth0();
+
+  const authButtons = (
+    <Nav className="ml-auto" navbar>
+      <MainNavButtons />
+      <AuthNavButtons />
+    </Nav>
+  );
+  
+  const guestButtons = (
+    <Nav className="ml-auto" navbar>
+      <AuthNavButtons />
+    </Nav>
+  );
+
   return (
-    <div className='nav-container mb-3'>
-      <nav className='navbar navbar-expand-md navbar-light bg-light'>
-        <div className='container'>
-          <div className='navbar-brand logo' />
-          <MainNavButtons />
-          <AuthNavButtons />
-        </div>
-      </nav>
-    </div>
+      <Navbar color="dark" dark expand="md" className="mb-5">
+        <Container>
+          <NavbarBrand href="/">GG.WP</NavbarBrand>
+          <NavbarToggler onClick={handleToggle} />
+          <Collapse isOpen={isOpen} navbar>
+            { isAuthenticated ? authButtons : guestButtons }
+          </Collapse>
+        </Container>
+      </Navbar>
   );
 };
 

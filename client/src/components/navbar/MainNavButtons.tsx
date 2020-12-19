@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
 
 const MainNav = () => (
   <div className='navbar-nav mr-auto'>
