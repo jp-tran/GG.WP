@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
+// routes
+import userRoutes from './routes/api/users';
+
 const app = express();
 
 //middleware
@@ -23,6 +26,9 @@ mongoose
   })
   .then(() => console.log('MongoDB conected'))
   .catch((err: any) => console.log(err));
+
+// Use Routes
+app.use('/user', userRoutes);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
