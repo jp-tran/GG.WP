@@ -1,12 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
 // Create Schema
 const UserSchema = new Schema({
-  nameFirst: {
+  firstName: {
     type: String,
     required: true,
   },
-  nameLast: {
+  lastName: {
+    type: String,
+    required: true,
+  },
+  username: {
     type: String,
     required: true,
   },
@@ -25,12 +29,14 @@ const UserSchema = new Schema({
     default: [],
   },
   followers: {
-    type: Array,
-    default: [],
+    type: Map,
+    of: String,
+    default: new Map(),
   },
   following: {
-    type: Array,
-    default: [],
+    type: Map,
+    of: String,
+    default: new Map(),
   },
   posts: {
     type: Array,
@@ -38,6 +44,17 @@ const UserSchema = new Schema({
   },
 });
 
-const User = model('user', UserSchema);
+// define interface that describes the schema
+export interface UserDoc extends Document {
+  firstName: string;
+  lastName: string;
+  email: string;
+  id: string;
+  igns: string[];
+  followers: Map<string, string>;
+  following: Map<string, string>;
+  posts: string[];
+}
 
+const User = model<UserDoc>('user', UserSchema);
 export default User;
